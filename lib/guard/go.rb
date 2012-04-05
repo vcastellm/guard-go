@@ -7,6 +7,17 @@ module Guard
   class Go < Guard::Guard 
     attr_reader :options, :runner
 
+    DEFAULT_OPTIONS = {
+        :go_file => 'app.go'
+    }
+    
+    def initialize(watchers = [], options = {})
+      super(watchers, options)
+
+      @options = DEFAULT_OPTIONS.merge(options)
+      @runner = ::Guard::RackRunner.new(@options)
+    end
+
     # Call once when Guard starts. Please override initialize method to init stuff.
     # @raise [:task_has_failed] when start has failed
     def start
@@ -20,11 +31,9 @@ module Guard
     def run_on_change(paths)
       UI.info "Restarting Go..."
       if runner.restart
-        UI.info "Rack restarted, pid #{runner.pid}"
-        Notifier.notify("Rack restarted on port #{options[:port]}.", :title => "Rack restarted!", :image => :success)
+        UI.info "Go restarted, pid #{runner.pid}"
       else
-        UI.info "Rack NOT restarted, check your log files."
-        Notifier.notify("Rack NOT restarted, check your log files.", :title => "Rack NOT restarted!", :image => :failed)
+        UI.info "Go NOT restarted, check your log files."
       end
     end
 
