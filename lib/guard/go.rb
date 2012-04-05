@@ -15,7 +15,7 @@ module Guard
       super
 
       @options = DEFAULT_OPTIONS.merge(options)
-      @runner = Guard::Go::Runner.new(@options)
+      @runner = Guard::GoRunner.new(@options)
     end
 
     # Call once when Guard starts. Please override initialize method to init stuff.
