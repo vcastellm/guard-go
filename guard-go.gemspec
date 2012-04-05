@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/guard-go/version', __FILE__)
+require File.expand_path('../lib/guard/go/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Victor Castell"]
@@ -15,5 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Guard::Go::VERSION
 
-  gem.add_dependency 'guard', '>= 0.2.2
+  gem.add_dependency 'guard', '>= 1.0.0'
 end

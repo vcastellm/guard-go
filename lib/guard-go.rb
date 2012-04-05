@@ -1,1 +1,1 @@
-require 'guard-go/go'
+require 'guard/go'

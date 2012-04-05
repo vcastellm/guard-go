@@ -1,7 +1,7 @@
-require "guard-go/go/version"
 require 'guard'
 require 'guard/guard'
 require 'guard/watcher'
+require 'guard/go/runner'
 
 module Guard
   class Go < Guard::Guard 
