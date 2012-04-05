@@ -25,7 +25,7 @@ module Guard
       end
     end
 
-    def run_on_change
+    def run_on_change(paths)
       UI.info "Restarting Go..."
       if @runner.restart
         UI.info "Go restarted, pid #{@runner.pid}"
