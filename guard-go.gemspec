@@ -4,8 +4,8 @@ require File.expand_path('../lib/guard/go/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Victor Castell"]
   gem.email         = ["victorcoder@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Guard gem for Go}
+  gem.summary       = %q{Guard gem for launching go files}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)

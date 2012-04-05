@@ -6,40 +6,38 @@ require 'guard/go/runner'
 module Guard
   class Go < ::Guard::Guard 
     attr_reader :options
-
-    DEFAULT_OPTIONS = {
-        :go_file => 'app.go'
-    }
     
     def initialize(watchers = [], options = {})
       super
 
-      @options = DEFAULT_OPTIONS.merge(options)
-      @runner = ::Guard::GoRunner.new(@options)
+      go_file = watchers.first.pattern || 'app.go'
+      
+      unless File.exists? go_file
+        raise "Go file #{go_file} not found"
+      end
+      @runner = ::Guard::GoRunner.new(go_file, options)
     end
 
-    # Call once when Guard starts. Please override initialize method to init stuff.
-    # @raise [:task_has_failed] when start has failed
     def start
-      run_all if options[:all_on_start]
+      UI.info "Starting Go..."
+      if pid = @runner.start
+        UI.info "Started Go app, pid #{pid}"  
+      end
     end
 
-    def run_all
-      run_on_change(Watcher.match_files(self, Dir.glob('{,**/}*{,.*}').uniq))
-    end
-
-    def run_on_change(paths)
+    def run_on_change
       UI.info "Restarting Go..."
       if @runner.restart
-        UI.info "Go restarted, pid #{runner.pid}"
+        UI.info "Go restarted, pid #{@runner.pid}"
       else
         UI.info "Go NOT restarted, check your log files."
       end
     end
 
     def stop
-      Notifier.notify("Until next time...", :title => "Go shutting down.", :image => :pending)
       @runner.stop
+      UI.info "Stopping Go..."
+      Notifier.notify("Until next time...", :title => "Go shutting down.", :image => :pending)
     end
   end
 end

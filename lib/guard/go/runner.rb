@@ -4,22 +4,23 @@ module Guard
   class GoRunner
     MAX_WAIT_COUNT = 10
 
-    attr_reader :options
+    attr_reader :options, :pid
 
-    def initialize(options)
+    def initialize(file, options)
+      @file = file
       @options = options
     end
 
     def start
-      run_rails_command!
-      wait_for_pid
+      run_go_command!
     end
 
     def stop
-      if File.file?(pid_file)
-        system %{kill -KILL #{File.read(pid_file).strip}}
-        wait_for_no_pid if $?.exitstatus == 0
-        FileUtils.rm pid_file
+      ps_go_pid.each do |pid|
+        system %{kill -KILL #{pid}}
+      end
+      while ps_go_pid.count > 0
+        wait sleep_time
       end
     end
 
@@ -29,15 +30,11 @@ module Guard
     end
 
     def build_go_command
-      %{sh -c 'cd #{Dir.pwd} && go run #{options[:go_file]} &'}
+      %{cd #{Dir.pwd} && go run #{@file}}
     end
 
-    def pid_file
-      File.expand_path("tmp/pids/#{options[:go_file]}.pid")
-    end
-
-    def pid
-      File.file?(pid_file) ? File.read(pid_file).to_i : nil
+    def ps_go_pid
+      `ps aux | awk '/a.out/&&!/awk/{print $2;}'`.split("\n").map { |pid| pid.to_i }
     end
 
     def sleep_time
@@ -46,29 +43,10 @@ module Guard
 
     private
     def run_go_command!
-      system build_go_command
-      system %{echo $! > #{pid_file}}
-    end
-
-    def has_pid?
-      File.file?(pid_file)
-    end
-
-    def wait_for_pid_action
-      sleep sleep_time
-    end
-
-    def wait_for_pid
-      wait_for_pid_loop
-    end
-
-    def wait_for_pid_loop
-      count = 0
-      while !has_pid? && count < MAX_WAIT_COUNT
-        wait_for_pid_action
-        count += 1
+      @pid = fork do
+        exec build_go_command
       end
-      !(count == MAX_WAIT_COUNT)
+      @pid
     end
   end
 end
