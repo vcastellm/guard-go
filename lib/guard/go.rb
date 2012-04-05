@@ -4,7 +4,7 @@ require 'guard/watcher'
 require 'guard/go/runner'
 
 module Guard
-  class Go < Guard::Guard 
+  class Go < ::Guard::Guard 
     attr_reader :options
 
     DEFAULT_OPTIONS = {
@@ -15,7 +15,7 @@ module Guard
       super
 
       @options = DEFAULT_OPTIONS.merge(options)
-      @runner = Guard::GoRunner.new(@options)
+      @runner = ::Guard::GoRunner.new(@options)
     end
 
     # Call once when Guard starts. Please override initialize method to init stuff.
