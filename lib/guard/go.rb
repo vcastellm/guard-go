@@ -5,7 +5,7 @@ require 'guard/go/runner'
 
 module Guard
   class Go < Guard::Guard 
-    attr_reader :options, :runner
+    attr_reader :options
 
     DEFAULT_OPTIONS = {
         :go_file => 'app.go'
@@ -30,7 +30,7 @@ module Guard
 
     def run_on_change(paths)
       UI.info "Restarting Go..."
-      if runner.restart
+      if @runner.restart
         UI.info "Go restarted, pid #{runner.pid}"
       else
         UI.info "Go NOT restarted, check your log files."
@@ -39,7 +39,7 @@ module Guard
 
     def stop
       Notifier.notify("Until next time...", :title => "Go shutting down.", :image => :pending)
-      runner.stop
+      @runner.stop
     end
   end
 end
