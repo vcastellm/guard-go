@@ -4,7 +4,7 @@ require 'guard/watcher'
 require 'guard/go/runner'
 
 module Guard
-  class Go < ::Guard::Guard 
+  class Go < Guard::Guard 
     attr_reader :options
 
     DEFAULT_OPTIONS = {
@@ -12,7 +12,7 @@ module Guard
     }
     
     def initialize(watchers = [], options = {})
-      super(watchers, options)
+      super
 
       @options = DEFAULT_OPTIONS.merge(options)
       @runner = ::Guard::RackRunner.new(@options)
