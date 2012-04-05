@@ -1,8 +1,8 @@
 require 'fileutils'
 
 module Guard
-  module Go
-    class GoRunner
+  class Go
+    class Runner
       MAX_WAIT_COUNT = 10
 
       attr_reader :options

@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "guard-go"
   gem.require_paths = ["lib"]
-  gem.version       = Guard::Go::VERSION
+  gem.version       = Guard::GoVersion::VERSION
 
   gem.add_dependency 'guard', '>= 1.0.0'
 end
