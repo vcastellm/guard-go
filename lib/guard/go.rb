@@ -4,7 +4,7 @@ require 'guard/watcher'
 require 'guard/go/runner'
 
 module Guard
-  class Go < Guard::Guard 
+  class Go < ::Guard::Guard 
     attr_reader :options
 
     DEFAULT_OPTIONS = {
