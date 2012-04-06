@@ -8,9 +8,9 @@ Guard Go runs go programs and restart when file changes
 
 You must have a working Ruby installation, then:
 
-   $ gem install bundler
-   $ cd /your/project/dir 
-   $ bundle init
+    $ gem install bundler
+    $ cd /your/project/dir 
+    $ bundle init
 
 # For gophers and Rubysts
 
