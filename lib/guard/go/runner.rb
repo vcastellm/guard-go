@@ -1,14 +1,13 @@
-require 'fileutils'
-
 module Guard
   class GoRunner
     MAX_WAIT_COUNT = 10
 
     attr_reader :options, :pid
 
-    def initialize(file, options)
-      @file = file
+    def initialize(options)
       @options = options
+
+      raise "Server file not found. Check your :server option in your Guarfile." unless File.exists? @options[:server]
     end
 
     def start
@@ -30,7 +29,7 @@ module Guard
     end
 
     def build_go_command
-      %{cd #{Dir.pwd} && go run #{@file}}
+      %{cd #{Dir.pwd} && go run #{@options[:server]} &}
     end
 
     def ps_go_pid
@@ -43,10 +42,8 @@ module Guard
 
     private
     def run_go_command!
-      @pid = fork do
-        exec build_go_command
-      end
-      @pid
+      system build_go_command
+      @pid = $?.pid
     end
   end
 end

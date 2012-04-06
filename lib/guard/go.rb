@@ -10,12 +10,11 @@ module Guard
     def initialize(watchers = [], options = {})
       super
 
-      go_file = watchers.first.pattern || 'app.go'
+      defaults = {
+        :server => 'app.go'
+      }
       
-      unless File.exists? go_file
-        raise "Go file #{go_file} not found"
-      end
-      @runner = ::Guard::GoRunner.new(go_file, options)
+      @runner = ::Guard::GoRunner.new(defaults.merge(options))
     end
 
     def start
