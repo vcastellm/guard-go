@@ -32,6 +32,13 @@ Read Guard usage https://github.com/guard/guard#usage
 
     $ bundle exec guard init go
 
-This will create your Guardfile. Edit it and configure your application file name (defaults to app.go)
+This will create your Guardfile. 
+
+Edit this and configure your application file name and desired options.
+
+Options defaults to:
+
+:server => 'app.go' - Go source file to run
+:test => false - To run go test insted of the app.
 
     $ bundle exec guard
