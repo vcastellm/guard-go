@@ -30,8 +30,8 @@ Or install it yourself as:
 
 Read Guard usage https://github.com/guard/guard#usage
 
-	$ bundle exec guard init go
+    $ bundle exec guard init go
 
 This will create your Guardfile. Edit it and configure your application file name (defaults to app.go)
 
-  $ bundle exec guard
+    $ bundle exec guard
