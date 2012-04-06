@@ -19,7 +19,7 @@ module Guard
         system %{kill -KILL #{pid}}
       end
       while ps_go_pid.count > 0
-        wait sleep_time
+        sleep sleep_time
       end
     end
 
