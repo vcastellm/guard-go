@@ -11,32 +11,47 @@ module Guard
       super
 
       defaults = {
-        :server => 'app.go'
+        :server => 'app.go',
+        :test => false
       }
       
-      @runner = ::Guard::GoRunner.new(defaults.merge(options))
+      @options = defaults.merge(options)
+
+      @runner = ::Guard::GoRunner.new(@options)
     end
 
     def start
-      UI.info "Starting Go..."
-      if pid = @runner.start
-        UI.info "Started Go app, pid #{pid}"  
-      end
+      start_info
+      run_info @runner.start
     end
 
     def run_on_change(paths)
-      UI.info "Restarting Go..."
-      if @runner.restart
-        UI.info "Go restarted, pid #{@runner.pid}"
-      else
-        UI.info "Go NOT restarted, check your log files."
-      end
+      start_info
+      run_info @runner.restart
     end
 
     def stop
       @runner.stop
       UI.info "Stopping Go..."
       Notifier.notify("Until next time...", :title => "Go shutting down.", :image => :pending)
+    end
+
+    private
+    def start_info
+      if @options[:test]
+        UI.info "Running go test..."
+      else
+        UI.info "Running #{options[:server]}..."
+      end
+    end
+
+    def run_info(pid)
+      return if @options[:test]
+      if pid
+        UI.info "Started Go app, pid #{pid}"  
+      else
+        UI.info "Go command failed, check your log files."
+      end
     end
   end
 end

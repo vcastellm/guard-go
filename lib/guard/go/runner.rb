@@ -29,7 +29,11 @@ module Guard
     end
 
     def build_go_command
-      %{cd #{Dir.pwd} && go run #{@options[:server]} &}
+      if @options[:test]
+        %{cd #{Dir.pwd} && go test}
+      else
+        %{cd #{Dir.pwd} && go run #{@options[:server]} &}
+      end
     end
 
     def ps_go_pid
