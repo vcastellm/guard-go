@@ -12,10 +12,13 @@ module Guard
 
       defaults = {
         :server => 'app.go',
-        :test => false
+        :test => false,
+        :args => []
       }
       
       @options = defaults.merge(options)
+      @options[:args] = wrap_args(@options[:args])
+      @options[:args_to_s] = @options[:args].join(" ")
 
       @runner = ::Guard::GoRunner.new(@options)
     end
@@ -41,7 +44,7 @@ module Guard
       if @options[:test]
         UI.info "Running go test..."
       else
-        UI.info "Running #{options[:server]}..."
+        UI.info "Running #{options[:server] } #{options[:args_to_s]} ..."
       end
     end
 
@@ -51,6 +54,16 @@ module Guard
         UI.info "Started Go app, pid #{pid}"  
       else
         UI.info "Go command failed, check your log files."
+      end
+    end
+
+    def wrap_args(obj)
+      if obj.nil?
+        []
+      elif obj.respond_to?(:to_ary)
+        obj.to_ary || [obj]
+      else
+        [obj]
       end
     end
   end
