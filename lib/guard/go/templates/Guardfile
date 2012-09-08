@@ -1,6 +1,6 @@
 # Add files and commands to this file, like the example:
 #   watch(%r{file/path}) { `command(s)` }
 #
-guard 'go', :server => 'app.go' do
+guard 'go', :server => 'app.go', :args => [] do
   watch(%r{\.go$})
 end
