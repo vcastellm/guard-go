@@ -32,7 +32,7 @@ module Guard
       if @options[:test]
         %{cd #{Dir.pwd} && go test}
       else
-        %{cd #{Dir.pwd} && go run #{@options[:server]} &}
+        %{cd #{Dir.pwd} && go run #{@options[:server]} #{@options[:args_to_s]} &}
       end
     end
 

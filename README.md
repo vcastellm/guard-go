@@ -4,7 +4,7 @@ Guard Go runs go programs and restart when file changes
 
 ## Installation
 
-# For gophers
+### For gophers
 
 You must have a working Ruby installation, then:
 
@@ -12,7 +12,7 @@ You must have a working Ruby installation, then:
     $ cd /your/project/dir 
     $ bundle init
 
-# For gophers and Rubysts
+### For gophers and Rubysts
 
 Add this line to your application's Gemfile:
 
@@ -38,7 +38,8 @@ Edit this and configure your application file name and desired options.
 
 Options defaults to:
 
-:server => 'app.go' - Go source file to run
-:test => false - To run go test insted of the app.
+    :server => 'app.go' # Go source file to run
+    :test   => false    # To run go test insted of the app.
+    :args   => []       # Parameters, e.g. :args => 420, :args => [420, 120], :args => ["one", "two"]
 
     $ bundle exec guard
