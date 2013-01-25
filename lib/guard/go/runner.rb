@@ -6,8 +6,7 @@ module Guard
 
     def initialize(options)
       @options = options
-
-      raise "Server file not found. Check your :server option in your Guarfile." unless File.exists? @options[:server]
+      raise ArgumentError, "Server file not found. Check the :server option in your Guardfile." unless server_file_exists? or @options[:test] or @options[:doc]
     end
 
     def start
@@ -30,7 +29,9 @@ module Guard
 
     def build_go_command
       if @options[:test]
-        %{cd #{Dir.pwd} && go test}
+        %{cd #{Dir.pwd} && go test #{@options[:package]}}
+      elsif @options[:doc]
+        %{cd #{Dir.pwd} && godoc #{@options[:args].join(' ')}}
       else
         %{cd #{Dir.pwd} && go run #{@options[:server]} #{@options[:args_to_s]} &}
       end
@@ -45,9 +46,14 @@ module Guard
     end
 
     private
+
     def run_go_command!
       system build_go_command
       @pid = $?.pid
+    end
+
+    def server_file_exists?
+      File.exists? @options[:server]
     end
   end
 end
