@@ -15,12 +15,7 @@ module Guard
     end
 
     def stop
-      ps_go_pid.each do |pid|
-        system %{kill -KILL #{pid}}
-      end
-      while ps_go_pid.count > 0
-        sleep sleep_time
-      end
+      system 'killall a.out'
     end
 
     def restart
