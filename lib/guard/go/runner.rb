@@ -7,7 +7,7 @@ module Guard
     def initialize(options)
       @options = options
 
-      raise "Server file not found. Check your :server option in your Guarfile." unless File.exists? @options[:server]
+      raise "Server file not found. Check your :server option in your Guardfile." unless File.exists? @options[:server]
     end
 
     def start
@@ -37,7 +37,8 @@ module Guard
     end
 
     def ps_go_pid
-      `ps aux | awk '/a.out/&&!/awk/{print $2;}'`.split("\n").map { |pid| pid.to_i }
+      server_file_name_first_part = @options[:server].split('.')[0]
+      `ps aux | awk '/#{server_file_name_first_part}/&&!/awk/{print $2;}'`.split("\n").map { |pid| pid.to_i }
     end
 
     def sleep_time
