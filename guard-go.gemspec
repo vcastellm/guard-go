@@ -16,4 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = Guard::GoVersion::VERSION
 
   gem.add_dependency 'guard', '>= 1.0.0'
+  gem.add_dependency 'sys-proctable', '>= 0.9'
+  gem.add_dependency 'childprocess', '>= 0.3'
 end

@@ -1,3 +1,6 @@
+require 'sys/proctable'
+require 'childprocess'
+
 module Guard
   class GoRunner
     MAX_WAIT_COUNT = 10
@@ -21,23 +24,16 @@ module Guard
       while ps_go_pid.count > 0
         sleep sleep_time
       end
+      @proc.stop
+    end
+
+    def ps_go_pid
+      Sys::ProcTable.ps.select{ |pe| pe.ppid == @pid }.map { |pe| pe.pid }
     end
 
     def restart
       stop
       start
-    end
-
-    def build_go_command
-      if @options[:test]
-        %{cd #{Dir.pwd} && go test}
-      else
-        %{cd #{Dir.pwd} && go run #{@options[:server]} #{@options[:args_to_s]} &}
-      end
-    end
-
-    def ps_go_pid
-      `ps aux | awk '/a.out/&&!/awk/{print $2;}'`.split("\n").map { |pid| pid.to_i }
     end
 
     def sleep_time
@@ -46,8 +42,16 @@ module Guard
 
     private
     def run_go_command!
-      system build_go_command
-      @pid = $?.pid
+      if @options[:test]
+        @proc = ChildProcess.build("go", "test")
+      else
+        @proc = ChildProcess.build("go", "run", @options[:server], @options[:args_to_s])
+      end
+
+      @proc.io.inherit!
+      @proc.cwd = Dir.pwd
+      @proc.start
+      @pid = @proc.pid
     end
   end
 end
