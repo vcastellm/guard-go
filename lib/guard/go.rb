@@ -4,9 +4,9 @@ require 'guard/watcher'
 require 'guard/go/runner'
 
 module Guard
-  class Go < ::Guard::Guard 
+  class Go < ::Guard::Guard
     attr_reader :options
-    
+
     def initialize(watchers = [], options = {})
       super
 
@@ -15,7 +15,7 @@ module Guard
         :test => false,
         :args => []
       }
-      
+
       @options = defaults.merge(options)
       @options[:args] = wrap_args(@options[:args])
       @options[:args_to_s] = @options[:args].join(" ")
@@ -51,7 +51,7 @@ module Guard
     def run_info(pid)
       return if @options[:test]
       if pid
-        UI.info "Started Go app, pid #{pid}"  
+        UI.info "Started Go app, pid #{pid}"
       else
         UI.info "Go command failed, check your log files."
       end
