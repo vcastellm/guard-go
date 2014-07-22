@@ -41,17 +41,24 @@ module Guard
     end
 
     private
-    def run_go_command!
-      if @options[:test]
-        @proc = ChildProcess.build(@options[:cmd], "test")
-      else
-        if @options[:build_only]
-          @proc = ChildProcess.build(@options[:cmd], "build")
-        else
-          @proc = ChildProcess.build(@options[:cmd], "run", @options[:server], @options[:args_to_s])
-        end
-      end
 
+    def run_go_command!
+      child_process_args = [@options[:cmd]]
+      child_process_args << "build" << @options[:server]
+      child_process_args[1..-1] = "test" if @options[:test]
+
+      @proc = ChildProcess.build *child_process_args
+      start_child_process!
+
+      return if @options[:build_only] || @options[:test]
+
+      @proc.wait
+      server_cmd = "./" + @options[:server].sub('.go', '')
+      @proc = ChildProcess.build server_cmd, options[:args_to_s]
+      start_child_process!
+    end
+
+    def start_child_process!
       @proc.io.inherit!
       @proc.cwd = Dir.pwd
       @proc.start
