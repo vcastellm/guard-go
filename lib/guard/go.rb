@@ -11,9 +11,10 @@ module Guard
       super
 
       defaults = {
-        :server => 'app.go',
-        :test => false,
-        :args => []
+        server: 'app.go',
+        test: false,
+        args: [],
+        cmd: 'go'
       }
 
       @options = defaults.merge(options)

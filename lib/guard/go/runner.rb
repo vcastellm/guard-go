@@ -43,12 +43,12 @@ module Guard
     private
     def run_go_command!
       if @options[:test]
-        @proc = ChildProcess.build("go", "test")
+        @proc = ChildProcess.build(@options[:cmd], "test")
       else
         if @options[:build_only]
-          @proc = ChildProcess.build("go", "build")
+          @proc = ChildProcess.build(@options[:cmd], "build")
         else
-          @proc = ChildProcess.build("go", "run", @options[:server], @options[:args_to_s])
+          @proc = ChildProcess.build(@options[:cmd], "run", @options[:server], @options[:args_to_s])
         end
       end
 
