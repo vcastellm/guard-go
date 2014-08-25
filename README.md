@@ -9,7 +9,7 @@ Guard Go runs go programs and restart when file changes
 You must have a working Ruby installation, then:
 
     $ gem install bundler
-    $ cd /your/project/dir 
+    $ cd /your/project/dir
     $ bundle init
 
 ### For gophers and Rubysts
@@ -32,7 +32,7 @@ Read Guard usage https://github.com/guard/guard#usage
 
     $ bundle exec guard init go
 
-This will create your Guardfile. 
+This will create your Guardfile.
 
 Edit this and configure your application file name and desired options.
 
@@ -42,5 +42,6 @@ Options defaults to:
     :test        => false    # To run go test instead of the app.
     :build_only  => false    # To build instead of run.
     :args        => []       # Parameters, e.g. :args => 420, :args => [420, 120], :args => ["one", "two"]
+    :cmd         => 'go'     # Name of the Go commandline tool
 
     $ bundle exec guard
