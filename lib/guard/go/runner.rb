@@ -10,7 +10,7 @@ module Guard
     def initialize(options)
       @options = options
 
-      raise "Server file not found. Check your :server option in your Guarfile." unless File.exists? @options[:server]
+      raise "Server file not found. Check your :server option in your Guardfile." unless File.exists? @options[:server]
     end
 
     def start
