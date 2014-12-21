@@ -1,13 +1,13 @@
 require 'guard'
-require 'guard/guard'
+require 'guard/plugin'
 require 'guard/watcher'
 require 'guard/go/runner'
 
 module Guard
-  class Go < ::Guard::Guard
+  class Go < Plugin
     attr_reader :options
 
-    def initialize(watchers = [], options = {})
+    def initialize(options = {})
       super
 
       defaults = {
