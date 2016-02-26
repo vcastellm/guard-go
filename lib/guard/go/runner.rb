@@ -40,9 +40,9 @@ module Guard
 
     def run_go_command!
       if @options[:test]
-        run_command('test')
+        run_once('test')
       else
-        run_command('build')
+        run_once('install')
       end
 
       return if @options[:build_only] || @options[:test]
@@ -51,8 +51,9 @@ module Guard
       start_child_process!
     end
 
-    def run_command(command)
+    def run_once(command)
       @proc = ChildProcess.build @options[:cmd], command
+      @proc.environment['GOGC'] = 'off'
       @proc.io.inherit!
       @proc.cwd = Dir.pwd + "/#{@options[:go_folder]}"
       @proc.start
