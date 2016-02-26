@@ -38,10 +38,10 @@ Edit this and configure your application file name and desired options.
 
 Options defaults to:
 
-    :server      => 'app.go' # Go source file to run
-    :test        => false    # To run go test instead of the app.
-    :build_only  => false    # To build instead of run.
-    :args        => []       # Parameters, e.g. :args => 420, :args => [420, 120], :args => ["one", "two"]
-    :cmd         => 'go'     # Name of the Go commandline tool
+    :go_folder      => 'go-app' # Go source file to run
+    :test           => false    # To run go test instead of the app.
+    :build_only     => false    # To build instead of run.
+    :args           => []       # Parameters, e.g. :args => 420, :args => [420, 120], :args => ["one", "two"]
+    :cmd            => 'go'     # Name of the Go commandline tool
 
     $ bundle exec guard
