@@ -9,10 +9,6 @@ module Guard
 
     def initialize(options)
       @options = options
-
-      unless @options[:test] || @options[:build_only] || File.exists?(@options[:server])
-        raise "Server file not found. Check your :server option in your Guardfile."
-      end
     end
 
     def start
@@ -21,16 +17,14 @@ module Guard
 
     def stop
       ps_go_pid.each do |pid|
-        system %{kill -KILL #{pid}}
+        system %(kill -KILL #{pid})
       end
-      while ps_go_pid.count > 0
-        sleep sleep_time
-      end
+      sleep sleep_time while ps_go_pid.count > 0
       @proc.stop
     end
 
     def ps_go_pid
-      Sys::ProcTable.ps.select{ |pe| pe.ppid == @pid }.map { |pe| pe.pid }
+      Sys::ProcTable.ps.select { |pe| pe.ppid == @pid }.map(&:pid)
     end
 
     def restart
@@ -45,24 +39,35 @@ module Guard
     private
 
     def run_go_command!
-      child_process_args = [@options[:cmd]]
-      child_process_args << "build" << @options[:server]
-      child_process_args[1..-1] = "test" if @options[:test]
-
-      @proc = ChildProcess.build *child_process_args
-      start_child_process!
+      if @options[:test]
+        run_command('test')
+      else
+        run_command('build')
+      end
 
       return if @options[:build_only] || @options[:test]
 
-      @proc.wait
-      server_cmd = "./" + @options[:server].sub('.go', '')
-      @proc = ChildProcess.build server_cmd, options[:args_to_s]
+      @proc = ChildProcess.build "./#{@options[:go_folder]}"
       start_child_process!
+    end
+
+    def run_command(command)
+      @proc = ChildProcess.build @options[:cmd], command
+      @proc.io.inherit!
+      @proc.cwd = Dir.pwd + "/#{@options[:go_folder]}"
+      @proc.start
+      @pid = @proc.pid
+      @proc.wait
+      if @proc.exit_code == 0
+        Notifier.notify("#{command} success", title: 'Go App', image: :success)
+      else
+        Notifier.notify("#{command} failed", title: 'Go App', image: :failed)
+      end
     end
 
     def start_child_process!
       @proc.io.inherit!
-      @proc.cwd = Dir.pwd
+      @proc.cwd = Dir.pwd + "/#{@options[:go_folder]}"
       @proc.start
       @pid = @proc.pid
     end
