@@ -56,7 +56,8 @@ module Guard
 
       @proc.wait
       server_cmd = "./" + @options[:server].sub('.go', '')
-      @proc = ChildProcess.build server_cmd, options[:args_to_s]
+      args = [server_cmd, options[:args]].flatten
+      @proc = ChildProcess.build  *args
       start_child_process!
     end
 
